@@ -42,30 +42,35 @@ namespace Minesweeper
             gamegrid.Width = (dimsize);
             window.Height = (dimsize +100);
             window.Width = (dimsize +80);
-            for (int j = 0; j < loop+1; j++) {
+            for (int j = 0; j < loop; j++) {
                 
             for (int i = 0; i < loop; i++) {
                     tracker++;
             string contracker = "C"+tracker.ToString();
             Cell cell = new Cell
             {
-                
                  Height = 80,
                  Width = 80,
-                 Name= contracker
-
-            };
-            cell.VerticalAlignment = VerticalAlignment.Top;
-            cell.HorizontalAlignment= HorizontalAlignment.Left;
-            cell.Background= Brushes.White;
-            cell.Margin = new Thickness((i*80), (j*80), 0, 0);
-                    cell.Click += Cell_Click;
-            gamegrid.Children.Add(cell);
+                 Name= contracker,
+                 VerticalAlignment = VerticalAlignment.Top,
+                 HorizontalAlignment = HorizontalAlignment.Left,
+                 Background= Brushes.LightGray,
+                 Margin = new Thickness((i * 80), (j * 80), 0, 0),
+                 xaxis=i,
+                 yaxis=j,
+                 FontWeight= FontWeights.Bold,
+                 Content = ""
+                };
+                cell.Click += Cell_Click;
+                grid.cells.Add(cell);
+                gamegrid.Children.Add(cell);
                 Grid.SetRow(cell, i);
                 Grid.SetColumn(cell, 0);
             }
             }
-            grid.MakeField(loop, loop, loop);
+            grid.height = loop-1;
+            grid.width=loop-1;
+            grid.MakeField();
             dimsize= 0;
             tracker= 0;
         }
@@ -100,8 +105,8 @@ namespace Minesweeper
         private void Cell_Click(object sender, RoutedEventArgs e)
         {
             Cell clickedButton = (Cell)sender;
-            clickedButton.UnFlagging();
-            clickedButton.Content = clickedButton.image;
+            grid.CalcNearby(clickedButton.xaxis, clickedButton.yaxis);
+            
         }
     }
 }
