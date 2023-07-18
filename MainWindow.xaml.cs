@@ -28,12 +28,15 @@ namespace Minesweeper
             InitializeComponent();
         }
         int dimsize = 0;
-        int loop = 0;
-        int difficulty= 0;
+        int loop = 6;
+        int difficulty= 3;
         int diftrack= 0;
         
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
+
+            state.Visibility = Visibility.Collapsed;
+            play.Content = "Playing";
             int tracker = 0;
             grid.cells.Clear();
             for (int i = 1; i<loop + 1; i++)
@@ -71,6 +74,7 @@ namespace Minesweeper
                 Grid.SetColumn(cell, 0);
             }
             }
+            grid.remained = 0;
             grid.height = loop-1;
             grid.width=loop-1;
             grid.MakeField(difficulty);
@@ -119,7 +123,7 @@ namespace Minesweeper
                     diff.Content = "Hard";
                     break;
             }
-            difficulty = loop + (diftrack * 10);
+            difficulty = loop + (diftrack * 3);
 
         }
 
@@ -131,15 +135,30 @@ namespace Minesweeper
                 { 
                     grid.CalcNearby(clickedButton.xaxis, clickedButton.yaxis);
                 }
-                else if (clickedButton.isMined == true)
+
+                
+                else if (clickedButton.isMined == true && clickedButton.isFlagged == false)
                 {
                     grid.ClearField();
+                    play.Content = "Restart";
+                    state.Content = "Lost";
+                    state.Visibility= Visibility.Visible;
+                    state.Foreground = Brushes.Red;
+                }
+                if (grid.remained==grid.cells.Count-difficulty)
+                {
+                    play.Content = "Restart";
+                    state.Content = "Won";
+                    state.Visibility = Visibility.Visible;
+                    state.Foreground = Brushes.Green;
                 }
             }
             else if (e.ChangedButton== MouseButton.Right) 
             {
                 clickedButton.UnFlagging();
             }
+
+            size.Content = grid.remained;
         }
     }
 }

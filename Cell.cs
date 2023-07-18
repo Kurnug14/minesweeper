@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace minesweeper
 {
@@ -21,20 +22,19 @@ namespace minesweeper
         public int xaxis = 0;
         public int yaxis = 0;
         public Cell() {
-            CalcValue(1);
             }
         public void Opening()
         {
             IsEnabled = false;
+            isOpened= true;
         }
         public void CalcValue(int i)
         {
-            if (isMined==true)
+            if (this.isMined==true)
             {
-                image = "*";
-                Foreground = Brushes.Black;
-                Background = new SolidColorBrush(Colors.Red);
-                
+                Image pic = new Image();
+                pic.Source = new BitmapImage(new Uri("mine.png", UriKind.Relative));
+                Content = pic;
             }
             else {     
             switch (i)
@@ -69,8 +69,9 @@ namespace minesweeper
                     break;
                 }
                 image = i.ToString();
+                Content = image;
             }
-            Content = image;
+            
         }
             
         
@@ -78,21 +79,24 @@ namespace minesweeper
         {
             if (isFlagged== false) 
             {
+                Image pic = new Image();
                 isFlagged= true;
-                image = "|>";
+                pic.Source = new BitmapImage(new Uri("flag.png", UriKind.Relative));
+              
+                Content = pic;
             }
             else
             {
                 isFlagged= false;
                 image = "";
+                Content= image;
             }
-            Content= image;
-            
-
         }
-        public void SetSymbol(int mode)
+        public void Mine ()
         {
-
+            Image pic = new Image();
+            pic.Source = new BitmapImage(new Uri("mine.png", UriKind.Relative));
+            Content = pic;
         }
     }
 }
