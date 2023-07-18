@@ -29,6 +29,8 @@ namespace Minesweeper
         }
         int dimsize = 0;
         int loop = 0;
+        int difficulty= 0;
+        int diftrack= 0;
         
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
@@ -61,7 +63,8 @@ namespace Minesweeper
                  FontWeight= FontWeights.Bold,
                  Content = ""
                 };
-                cell.Click += Cell_Click;
+                cell.PreviewMouseLeftButtonDown+= Cell_Click;
+                cell.PreviewMouseRightButtonDown+= Cell_Click;
                 grid.cells.Add(cell);
                 gamegrid.Children.Add(cell);
                 Grid.SetRow(cell, i);
@@ -70,7 +73,7 @@ namespace Minesweeper
             }
             grid.height = loop-1;
             grid.width=loop-1;
-            grid.MakeField();
+            grid.MakeField(difficulty);
             dimsize= 0;
             tracker= 0;
         }
@@ -79,19 +82,19 @@ namespace Minesweeper
         {
             loop += 3;
 
-            if (loop > 9) 
+            if (loop > 12) 
             {
-                loop = 3;
+                loop = 6;
             }
             switch (loop)
             {
-                case 3:
+                case 6:
                     size.Content = "Small";
                     break;
-                case 6:
+                case 9:
                     size.Content = "Medium";
                     break;
-                case 9:
+                case 12:
                     size.Content = "Big";
                     break;
             }
@@ -99,14 +102,44 @@ namespace Minesweeper
 
         private void Difficulty_Click(object sender, RoutedEventArgs e)
         {
+            diftrack += 1;
+            if (diftrack > 3)
+            {
+                diftrack = 1;
+            }
+            switch (diftrack)
+            {
+                case 1:
+                    diff.Content = "Easy";
+                    break;
+                case 2:
+                    diff.Content = "Medium";
+                    break;
+                case 3:
+                    diff.Content = "Hard";
+                    break;
+            }
+            difficulty = loop + (diftrack * 10);
 
         }
 
-        private void Cell_Click(object sender, RoutedEventArgs e)
+        private void Cell_Click(object sender, MouseButtonEventArgs e)
         {
             Cell clickedButton = (Cell)sender;
-            grid.CalcNearby(clickedButton.xaxis, clickedButton.yaxis);
-            
+            if (e.ChangedButton == MouseButton.Left) { 
+                if (clickedButton.isMined == false && clickedButton.isFlagged==false) 
+                { 
+                    grid.CalcNearby(clickedButton.xaxis, clickedButton.yaxis);
+                }
+                else if (clickedButton.isMined == true)
+                {
+                    grid.ClearField();
+                }
+            }
+            else if (e.ChangedButton== MouseButton.Right) 
+            {
+                clickedButton.UnFlagging();
+            }
         }
     }
 }

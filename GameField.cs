@@ -13,9 +13,8 @@ namespace minesweeper
     {
         public int height;
         public int width;
-        public int minesnum=3;
         public List<Cell> cells = new List<Cell>();
-        public void MakeField()
+        public void MakeField(int minesnum)
         {
             Random rng = new Random();
             for (int i = 0; i < minesnum; i+=0) 
@@ -23,6 +22,7 @@ namespace minesweeper
                 int minepos = rng.Next(0, cells.Count());
                 if (cells[minepos].isMined==false)
                 {
+                    cells[minepos].image = "*";
                     cells[minepos].isMined = true;
                     i++;
                 }
@@ -30,22 +30,31 @@ namespace minesweeper
         }
         public void ClearField()
         {
-
+            foreach (Cell cell in cells)
+            {
+               CalcNearby(cell.xaxis, cell.yaxis);
+                cell.Content = cell.image;
+            }
         }
         public void CalcNearby(int xaxis, int yaxis)
         {
+            int tracker = 0;
+            List<Cell> queue = new List<Cell>();
             Cell celltrack = cells.Find(cell => cell.xaxis == xaxis && cell.yaxis == yaxis);
-            if (celltrack != null && celltrack.isOpened==false)
-            {
-                celltrack.Opening();
+            queue.Add(celltrack);
+            
+            while (tracker< queue.Count) { 
                 int count = 0;
+                xaxis = queue[tracker].xaxis;
+                yaxis = queue[tracker].yaxis;
+                queue[tracker].Opening();
+                
 
                 List<Cell> nearcells = cells.FindAll(cell => 
                 (
                     (cell.xaxis == xaxis - 1    && (cell.yaxis == yaxis-1 || cell.yaxis == yaxis+1 || cell.yaxis==yaxis)) 
                 ||  (cell.xaxis == xaxis + 1    && (cell.yaxis == yaxis - 1 || cell.yaxis == yaxis + 1 || cell.yaxis == yaxis))
-                ||  (cell.yaxis== yaxis-1       && (cell.xaxis == xaxis-1 || cell.xaxis== xaxis+1 || cell.xaxis== xaxis))
-                ||  (cell.yaxis == yaxis + 1 && (cell.xaxis == xaxis - 1 || cell.xaxis == xaxis + 1 || cell.xaxis == xaxis))
+                ||  (cell.xaxis== xaxis      && (cell.yaxis == yaxis-1 || cell.yaxis== yaxis+1))
                 && cell.isOpened == false
             ));
                 foreach (Cell cell in nearcells)
@@ -55,14 +64,18 @@ namespace minesweeper
                         count++;
                     }
                 }
+                
                 if (count == 0)
                 {
-                    CalcNearby(xaxis+1, yaxis);
+                    List<Cell> temp = queue;
+                    temp.AddRange(nearcells);
+                    queue = temp.Distinct().ToList();
                 }
                 else
                 {
-                    celltrack.CalcValue(count);
+                    queue[tracker].CalcValue(count);
                 }
+                tracker++;
             }
         }
     }

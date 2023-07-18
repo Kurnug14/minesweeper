@@ -15,7 +15,7 @@ namespace minesweeper
         public int coords = 1;
         public bool isMined;
         int value;
-        bool isFlagged = false;
+        public bool isFlagged = false;
         public string image="";
         public bool isOpened=false;
         public int xaxis = 0;
@@ -34,6 +34,7 @@ namespace minesweeper
                 image = "*";
                 Foreground = Brushes.Black;
                 Background = new SolidColorBrush(Colors.Red);
+                
             }
             else {     
             switch (i)
@@ -75,6 +76,18 @@ namespace minesweeper
         
         public void UnFlagging()
         {
+            if (isFlagged== false) 
+            {
+                isFlagged= true;
+                image = "|>";
+            }
+            else
+            {
+                isFlagged= false;
+                image = "";
+            }
+            Content= image;
+            
 
         }
         public void SetSymbol(int mode)
