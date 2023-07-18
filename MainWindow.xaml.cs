@@ -159,7 +159,6 @@ namespace Minesweeper
                 clickedButton.UnFlagging();
             }
 
-            size.Content = grid.remained;
         }
     }
 }
