@@ -8,11 +8,12 @@
         Title="MainWindow" Height="310" Width="260"
         x:Name="window">
     <Grid>
-        <Button Content="Difficulty" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Click="Difficulty_Click" Width="60" x:Name="diff"/>
-        <Button Content="Size" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Click="Size_Click" Width="60" x:Name="size"/>
-        <Button Content="Reset" HorizontalAlignment="Right" Margin="0,10,20,0" VerticalAlignment="Top" Click="Reset_Click" Width="60"/>
+        <Button Content="Easy" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top" Click="Difficulty_Click" Width="60" x:Name="diff"/>
+        <Button Content="Small" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" Click="Size_Click" Width="60" x:Name="size"/>
+        <Button Content="Start" HorizontalAlignment="Right" Margin="0,10,20,0" VerticalAlignment="Top" Click="Reset_Click" Width="60" x:Name="play"/>
         <Grid Margin="0,40,0,20" Height="240" Width="240" VerticalAlignment="Top" HorizontalAlignment="Center" x:Name="gamegrid">
-
+            <Label HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.763,0.386" Visibility="Visible" x:Name="state" Height="82" Width="144" Content="Start" FontSize="36" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.ZIndex="1" FontWeight="Bold" Foreground="Black">
+            </Label>
         </Grid>
     </Grid>
 </Window>
