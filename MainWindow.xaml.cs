@@ -134,6 +134,13 @@ namespace Minesweeper
                 if (clickedButton.isMined == false && clickedButton.isFlagged==false) 
                 { 
                     grid.CalcNearby(clickedButton.xaxis, clickedButton.yaxis);
+                    if (grid.remained == grid.cells.Count - difficulty)
+                    {
+                        play.Content = "Restart";
+                        state.Content = "Won";
+                        state.Visibility = Visibility.Visible;
+                        state.Foreground = Brushes.Green;
+                    }
                 }
 
                 
@@ -145,13 +152,7 @@ namespace Minesweeper
                     state.Visibility= Visibility.Visible;
                     state.Foreground = Brushes.Red;
                 }
-                if (grid.remained==grid.cells.Count-difficulty)
-                {
-                    play.Content = "Restart";
-                    state.Content = "Won";
-                    state.Visibility = Visibility.Visible;
-                    state.Foreground = Brushes.Green;
-                }
+                
             }
             else if (e.ChangedButton== MouseButton.Right) 
             {
