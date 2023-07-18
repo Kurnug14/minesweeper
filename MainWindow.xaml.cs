@@ -131,7 +131,7 @@ namespace Minesweeper
                 { 
                     grid.CalcNearby(clickedButton.xaxis, clickedButton.yaxis);
                 }
-                else if (clickedButton.isMined == true)
+                else if (clickedButton.isMined == true && clickedButton.isFlagged == false)
                 {
                     grid.ClearField();
                 }
