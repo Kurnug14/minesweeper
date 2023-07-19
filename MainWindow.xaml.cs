@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,11 +31,13 @@ namespace Minesweeper
         int dimsize = 0;
         int loop = 6;
         int difficulty= 3;
-        int diftrack= 0;
+        int diftrack= 1;
+        bool isempty = true;
+        double factor = 0.15;
         
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
-
+            isempty= true;
             state.Visibility = Visibility.Collapsed;
             play.Content = "Playing";
             int tracker = 0;
@@ -77,7 +80,7 @@ namespace Minesweeper
             grid.remained = 0;
             grid.height = loop-1;
             grid.width=loop-1;
-            grid.MakeField(difficulty);
+            
             dimsize= 0;
             tracker= 0;
         }
@@ -102,6 +105,7 @@ namespace Minesweeper
                     size.Content = "Big";
                     break;
             }
+            difficulty = Convert.ToInt32(Math.Round(loop * loop * factor));
         }
 
         private void Difficulty_Click(object sender, RoutedEventArgs e)
@@ -115,21 +119,31 @@ namespace Minesweeper
             {
                 case 1:
                     diff.Content = "Easy";
+                    factor = 0.15;
                     break;
                 case 2:
                     diff.Content = "Medium";
+                    factor = 0.2;
                     break;
                 case 3:
                     diff.Content = "Hard";
+                    factor = 0.25;
                     break;
             }
-            difficulty = loop + (diftrack * 3);
+            difficulty = Convert.ToInt32(Math.Round(loop * loop * factor));
 
         }
 
         private void Cell_Click(object sender, MouseButtonEventArgs e)
         {
             Cell clickedButton = (Cell)sender;
+            if (isempty==true)
+            {
+                grid.MakeField(difficulty, clickedButton.xaxis, clickedButton.yaxis);
+                isempty= false;
+                grid.CalcNearby(clickedButton.xaxis, clickedButton.yaxis);
+            }
+            else { 
             if (e.ChangedButton == MouseButton.Left) { 
                 if (clickedButton.isMined == false && clickedButton.isFlagged==false) 
                 { 
@@ -158,7 +172,7 @@ namespace Minesweeper
             {
                 clickedButton.UnFlagging();
             }
-
+            }
         }
     }
 }

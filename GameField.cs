@@ -17,13 +17,20 @@ namespace minesweeper
         public int width;
         public int remained=0;
         public List<Cell> cells = new List<Cell>();
-        public void MakeField(int minesnum)
+        public void MakeField(int minesnum, int xaxis, int yaxis)
         {
+            List<Cell> empties = (cells.FindAll(cell =>
+                (
+                   (cell.xaxis == xaxis - 1 && (cell.yaxis == yaxis - 1 || cell.yaxis == yaxis + 1 || cell.yaxis == yaxis   ))
+                || (cell.xaxis == xaxis + 1 && (cell.yaxis == yaxis - 1 || cell.yaxis == yaxis + 1 || cell.yaxis == yaxis   ))
+                || (cell.xaxis == xaxis     && (cell.yaxis == yaxis - 1 || cell.yaxis == yaxis + 1 || cell.yaxis == yaxis   ))
+
+                )));
             Random rng = new Random();
             for (int i = 0; i < minesnum; i+=0) 
             {
                 int minepos = rng.Next(0, cells.Count());
-                if (cells[minepos].isMined==false)
+                if (cells[minepos].isMined == false && empties.Contains(cells[minepos]) == false)
                 {
                     cells[minepos].isMined = true;
                     i++;
